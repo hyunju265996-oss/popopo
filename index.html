@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111126">
+<title>TRIPMATE — 글로벌 여행 챗봇</title>
+<style>
+:root{--bg:#0d0d1b;--panel:#17172b;--panel2:#20203a;--line:#343451;--text:#f7f6ff;--muted:#aaa9c5;--purple:#a78bfa;--pink:#f472b6;--mint:#7ce7ce;--yellow:#ffd782}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#29204d 0,transparent 36%),radial-gradient(ellipse at 95% 20%,#3a1740 0,transparent 30%),var(--bg);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer}
+.shell{max-width:1440px;margin:auto;padding:22px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:1.4px;font-size:20px}.logo{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,var(--purple),var(--pink));display:grid;place-items:center;color:#171326;font-size:23px;box-shadow:0 8px 30px #a78bfa44}.top-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted);background:#ffffff06}.pill.live{color:var(--mint);border-color:#7ce7ce55}
+.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:18px;margin-bottom:18px}.hero-main,.hero-side,.panel{background:linear-gradient(145deg,#1b1b33ed,#131326f5);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 50px #0002}.hero-main{padding:30px;position:relative;overflow:hidden;min-height:230px}.eyebrow{font-size:12px;color:var(--mint);font-weight:800;letter-spacing:2px}.hero h1{font-size:clamp(28px,4vw,48px);line-height:1.13;max-width:720px;margin:14px 0 12px;letter-spacing:-1.4px}.hero h1 span{background:linear-gradient(90deg,#c4b5fd,#f9a8d4);color:transparent;background-clip:text}.hero p{color:var(--muted);max-width:650px;line-height:1.7;margin:0}.orbit{position:absolute;right:26px;bottom:14px;font-size:96px;opacity:.14;transform:rotate(-15deg)}.hero-side{padding:22px;display:flex;flex-direction:column;justify-content:space-between}.side-label{color:var(--muted);font-size:12px}.side-number{font-size:30px;font-weight:850;margin:8px 0}.side-note{font-size:12px;color:var(--muted);line-height:1.5}.rate-row{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:14px;margin-top:14px;font-size:13px}.rate-row strong{color:var(--yellow)}
+.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.75fr);gap:18px;align-items:start}.panel{padding:22px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.panel h2{font-size:18px;margin:0;letter-spacing:-.3px}.sub{font-size:12px;color:var(--muted);margin-top:6px}.chat-panel{min-height:670px;display:flex;flex-direction:column}.messages{display:flex;flex-direction:column;gap:14px;flex:1;min-height:300px;max-height:480px;overflow:auto;padding:4px 2px 18px}.message{display:flex;gap:10px;align-items:flex-start;max-width:94%}.message.user{align-self:flex-end;flex-direction:row-reverse}.avatar{width:34px;height:34px;flex:0 0 34px;border-radius:12px;background:linear-gradient(135deg,#c4b5fd,#f9a8d4);color:#19152b;display:grid;place-items:center;font-size:17px;font-weight:900}.user .avatar{background:#343450;color:#fff}.bubble{background:#22223b;border:1px solid #393956;padding:13px 15px;border-radius:6px 17px 17px 17px;line-height:1.65;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.user .bubble{background:#4c3477;border-color:#7656a7;border-radius:17px 6px 17px 17px}.bubble strong{color:#d9ceff}.quick-prompts{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}.quick{border:1px solid #494464;background:#ffffff06;color:#ded9f6;border-radius:999px;padding:8px 11px;font-size:12px}.quick:hover{border-color:var(--purple);background:#a78bfa18}.chat-input-row{display:flex;gap:9px;border-top:1px solid var(--line);padding-top:16px}.chat-input-row input{flex:1;min-width:0;background:#101021;border:1px solid #3b3b59;color:var(--text);border-radius:14px;padding:14px;outline:none}.chat-input-row input:focus{border-color:var(--purple)}.send{border:0;background:linear-gradient(135deg,var(--purple),var(--pink));color:#1c1530;font-weight:900;border-radius:14px;padding:0 19px}.hint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6}
+.right-col{display:flex;flex-direction:column;gap:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:var(--muted)}.field input,.field select{width:100%;background:#101021;color:var(--text);border:1px solid #3b3b59;border-radius:12px;padding:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--purple)}.primary{width:100%;border:0;border-radius:13px;padding:13px 16px;background:linear-gradient(100deg,var(--purple),var(--pink));color:#20172f;font-weight:900;margin-top:13px}.secondary{border:1px solid #51476c;background:#ffffff08;color:#eee8ff;border-radius:11px;padding:10px 12px;font-size:12px}.weather-result{background:#111123;border:1px solid #393956;border-radius:16px;padding:15px;margin-top:14px;display:none}.weather-top{display:flex;justify-content:space-between;align-items:center}.weather-temp{font-size:35px;font-weight:850}.weather-desc{color:var(--muted);font-size:12px}.weather-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.weather-meta div{background:#ffffff07;border-radius:10px;padding:10px}.weather-meta small{display:block;color:var(--muted);font-size:10px}.weather-meta b{font-size:13px;display:block;margin-top:5px}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.link-card{display:block;text-decoration:none;color:var(--text);border:1px solid #3b3b59;background:#ffffff05;border-radius:14px;padding:13px;transition:.2s}.link-card:hover{transform:translateY(-2px);border-color:var(--purple)}.link-card b{font-size:13px;display:block;margin-bottom:5px}.link-card small{color:var(--muted);font-size:11px;line-height:1.5}.link-icon{font-size:20px;margin-bottom:8px}.section-note{font-size:11px;line-height:1.65;color:var(--muted);margin-top:12px}.footer{color:#777694;font-size:11px;text-align:center;padding:24px 8px 10px;line-height:1.7}.status{font-size:11px;color:var(--muted);margin-top:8px}.error{color:#ffb4c6}.success{color:var(--mint)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.chat-panel{min-height:600px}.hero-side{min-height:170px}}
+@media(max-width:540px){.shell{padding:12px}.topbar{align-items:flex-start}.brand{font-size:16px}.top-meta .pill:first-child{display:none}.hero-main{padding:22px;min-height:250px}.hero h1{font-size:32px}.hero-side,.panel{padding:17px;border-radius:19px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.messages{max-height:420px}.chat-input-row input{padding:12px}.send{padding:0 14px}.links{grid-template-columns:1fr 1fr}.orbit{right:10px;font-size:70px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="logo">✦</div><div>TRIPMATE <span style="color:var(--purple)">GLOBAL</span></div></div>
+    <div class="top-meta"><span class="pill live">● LIVE DATA READY</span><span class="pill">2026.10 기준 UI</span><span class="pill">WORLDWIDE</span></div>
+  </header>
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">YOUR AI TRAVEL COMPANION</div>
+      <h1>세계를 더 가깝게,<br><span>여행은 더 똑똑하게.</span></h1>
+      <p>항공권 · 기차 · 숙소 · 맛집 · 날씨 · 환율까지 한 번에. 원하는 도시나 국가를 입력하면 여행 준비에 필요한 검색 경로와 정보를 안내해요.</p>
+      <div class="orbit">✈</div>
+    </div>
+    <div class="hero-side">
+      <div><div class="side-label">환율 빠른 확인 · USD 기준</div><div class="side-number" id="usd-rate">불러오는 중…</div><div class="side-note" id="rate-date">최신 공개 환율 데이터를 확인하고 있어요.</div></div>
+      <div class="rate-row"><span>환율 기준</span><strong>최신 공개 데이터</strong></div>
+      <div class="rate-row"><span>서비스 범위</span><strong>전 세계 여행지</strong></div>
+    </div>
+  </section>
+  <main class="layout">
+    <section class="panel chat-panel">
+      <div class="panel-head"><div><h2>✦ 여행 챗봇</h2><div class="sub">한국어로 편하게 질문해 보세요</div></div><span class="pill">TRIP AI</span></div>
+      <div class="messages" id="messages" aria-live="polite">
+        <div class="message"><div class="avatar">✦</div><div class="bubble">안녕하세요! 여행 준비를 도와주는 <strong>트립메이트</strong>예요. 🌍
+
+예를 들어 이렇게 물어보세요.
+• “11월에 서울에서 도쿄 가는 가장 저렴한 항공권 찾아줘”
+• “파리 날씨와 환율 알려줘”
+• “타이베이 숙소랑 현지 맛집 추천해줘”
+• “런던에서 맨체스터까지 기차 알아봐줘”
+
+실시간 판매가가 필요한 항공·기차·숙소는 검색 링크로 연결하고, 날씨와 환율은 공개 API에서 불러옵니다.</div></div>
+      </div>
+      <div class="quick-prompts">
+        <button class="quick" data-prompt="도쿄 항공권과 숙소 최저가 비교해줘">✈️ 도쿄 최저가</button>
+        <button class="quick" data-prompt="파리 날씨와 환율 알려줘">🌦️ 날씨 + 환율</button>
+        <button class="quick" data-prompt="런던에서 맨체스터까지 기차 알아봐줘">🚆 기차 검색</button>
+        <button class="quick" data-prompt="방콕 맛집과 숙소 추천해줘">🍜 맛집 + 숙소</button>
+      </div>
+      <form class="chat-input-row" id="chat-form"><input id="chat-input" placeholder="어디로 떠나고 싶으세요? (예: 이탈리아 로마)" autocomplete="off"><button class="send" type="submit">보내기 ↗</button></form>
+      <div class="hint">※ 이 데모는 실시간 예약/결제를 대신하지 않아요. 실제 가격·좌석·객실은 연결된 검색 서비스에서 확인해 주세요.</div>
+    </section>
+    <aside class="right-col">
+      <section class="panel">
+        <div class="panel-head"><div><h2>🌦️ 목적지 날씨</h2><div class="sub">도시 이름으로 전 세계 날씨 조회</div></div></div>
+        <form id="weather-form">
+          <div class="form-grid">
+            <div class="field full"><label for="city">도시 / 지역</label><input id="city" placeholder="예: Tokyo, Paris, 부산" value="Tokyo" required></div>
+          </div>
+          <button class="primary" type="submit">날씨 확인하기</button>
+        </form>
+        <div class="weather-result" id="weather-result"></div>
+        <div class="status" id="weather-status">Open-Meteo 공개 API 사용 · API 키 불필요</div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>🔎 최저가 여행 검색</h2><div class="sub">실제 판매처에서 최신 가격 비교</div></div></div>
+        <div class="form-grid">
+          <div class="field"><label for="origin">출발지</label><input id="origin" placeholder="서울 / Seoul" value="Seoul"></div>
+          <div class="field"><label for="destination">도착지</label><input id="destination" placeholder="도쿄 / Tokyo" value="Tokyo"></div>
+          <div class="field"><label for="depart-date">출발일</label><input id="depart-date" type="date"></div>
+          <div class="field"><label for="return-date">귀국일 (선택)</label><input id="return-date" type="date"></div>
+          <div class="field"><label for="travel-type">교통수단</label><select id="travel-type"><option value="all">항공 + 기차</option><option value="flight">항공권</option><option value="train">기차</option></select></div>
+          <div class="field"><label for="travelers">인원</label><select id="travelers"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <button class="primary" id="search-travel" type="button">최저가 검색 열기 ↗</button>
+        <div class="links" id="travel-links">
+          <a class="link-card" href="https://www.google.com/travel/flights" target="_blank" rel="noopener"><div class="link-icon">✈️</div><b>Google Flights</b><small>항공권 날짜별 가격 비교</small></a>
+          <a class="link-card" href="https://www.rome2rio.com/" target="_blank" rel="noopener"><div class="link-icon">🚆</div><b>Rome2Rio</b><small>항공·기차·버스 경로 비교</small></a>
+          <a class="link-card" href="https://www.booking.com/" target="_blank" rel="noopener"><div class="link-icon">🛏️</div><b>Booking.com</b><small>숙소와 객실 가격 확인</small></a>
+          <a class="link-card" href="https://www.google.com/maps" target="_blank" rel="noopener"><div class="link-icon">🍜</div><b>Google Maps</b><small>현지 맛집·평점·영업시간</small></a>
+        </div>
+        <div class="section-note">최저가를 임의로 만들어 표시하지 않습니다. 판매처의 실시간 가격은 날짜, 수하물, 환불 조건, 좌석 및 객실 상황에 따라 달라질 수 있어요.</div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>💱 환율 계산기</h2><div class="sub">최신 공개 기준 환율 · USD 환산</div></div></div>
+        <div class="form-grid">
+          <div class="field"><label for="amount">금액</label><input id="amount" type="number" min="0" value="100" step="any"></div>
+          <div class="field"><label for="currency">통화</label><select id="currency"><option value="USD">USD · 미국 달러</option><option value="EUR">EUR · 유로</option><option value="JPY">JPY · 일본 엔</option><option value="CNY">CNY · 중국 위안</option><option value="GBP">GBP · 영국 파운드</option><option value="THB">THB · 태국 바트</option><option value="TWD">TWD · 대만 달러</option><option value="KRW">KRW · 한국 원</option><option value="AUD">AUD · 호주 달러</option><option value="CAD">CAD · 캐나다 달러</option><option value="CHF">CHF · 스위스 프랑</option><option value="SGD">SGD · 싱가포르 달러</option><option value="HKD">HKD · 홍콩 달러</option><option value="VND">VND · 베트남 동</option><option value="INR">INR · 인도 루피</option><option value="IDR">IDR · 인도네시아 루피아</option><option value="MYR">MYR · 말레이시아 링깃</option><option value="PHP">PHP · 필리핀 페소</option><option value="NZD">NZD · 뉴질랜드 달러</option><option value="AED">AED · UAE 디르함</option></select></div>
+        </div>
+        <button class="secondary" id="convert-btn" style="width:100%;margin-top:12px">환산하기</button>
+        <div id="convert-result" class="section-note">환율 데이터를 불러오면 환산 결과가 표시됩니다.</div>
+      </section>
+    </aside>
+  </main>
+  <footer class="footer">TRIPMATE GLOBAL · 여행 정보 탐색용 포트폴리오 프로토타입<br>날씨: Open-Meteo · 환율: Frankfurter 공개 API · 가격/예약: 외부 판매처 링크<br>환율 및 날씨 정보는 참고용이며, 항공권·기차표·숙소 예약은 각 서비스의 최신 안내를 확인하세요.</footer>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+let fxRates = {USD:1, KRW:null, EUR:null, JPY:null};
+let fxDate = "";
+const fmt = (n, digits=2) => Number(n).toLocaleString('ko-KR',{maximumFractionDigits:digits});
+function addMessage(text, who="bot", isHtml=false){
+  const wrap=document.createElement("div"); wrap.className="message "+(who==="user"?"user":"");
+  const avatar=document.createElement("div"); avatar.className="avatar"; avatar.textContent=who==="user"?"나":"✦";
+  const bubble=document.createElement("div"); bubble.className="bubble";
+  if(isHtml) bubble.innerHTML=text; else bubble.textContent=text;
+  wrap.append(avatar,bubble); $("messages").append(wrap); $("messages").scrollTop=$("messages").scrollHeight;
+}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadRates(){
+  try{
+    const r=await fetch("https://api.frankfurter.app/latest?from=USD");
+    if(!r.ok) throw new Error("환율 API 응답 오류");
+    const d=await r.json(); fxDate=d.date; fxRates={...d.rates,USD:1};
+    $("usd-rate").textContent="1 USD = "+fmt(fxRates.KRW||0,0)+" KRW";
+    $("rate-date").textContent="공개 환율 기준일: "+fxDate+" · 주말/공휴일에는 직전 영업일 데이터일 수 있어요.";
+    updateConvert();
+  }catch(e){$("usd-rate").textContent="환율 조회 실패";$("rate-date").textContent="인터넷 연결 후 다시 시도해 주세요.";}
+}
+function updateConvert(){
+  const currency=$("currency").value, amount=Number($("amount").value||0);
+  if(!fxRates[currency] || !fxRates.KRW){$("convert-result").textContent="해당 통화의 환율 데이터가 없습니다. 다른 통화를 선택해 주세요.";return;}
+  const usd=currency==="USD"?amount:amount/fxRates[currency];
+  const krw=usd*fxRates.KRW;
+  $("convert-result").innerHTML=`<strong style="color:var(--mint)">${fmt(amount,4)} ${currency}</strong> ≈ <strong style="color:var(--yellow)">${fmt(krw,0)}원</strong><br><span style="color:var(--muted)">약 ${fmt(usd,2)} USD · 기준일 ${safe(fxDate||"조회 중")}</span><br><small>은행/카드사 수수료와 실제 적용 환율은 다를 수 있습니다.</small>`;
+}
+$("convert-btn").addEventListener("click",updateConvert);
+$("currency").addEventListener("change",updateConvert);
+$("amount").addEventListener("input",updateConvert);
+const weatherCodes={0:"맑음",1:"대체로 맑음",2:"구름 조금",3:"흐림",45:"안개",48:"서리 안개",51:"약한 이슬비",53:"이슬비",55:"강한 이슬비",61:"약한 비",63:"비",65:"강한 비",71:"약한 눈",73:"눈",75:"강한 눈",80:"소나기",81:"강한 소나기",82:"매우 강한 소나기",95:"뇌우",96:"우박 동반 뇌우",99:"강한 우박 동반 뇌우"};
+async function getWeather(city){
+  $("weather-status").textContent="위치를 찾고 날씨를 불러오는 중…"; $("weather-result").style.display="none";
+  try{
+    const geo=await fetch("https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(city)+"&count=1&language=ko&format=json");
+    if(!geo.ok) throw new Error("위치 검색에 실패했습니다.");
+    const gd=await geo.json(); if(!gd.results||!gd.results.length) throw new Error("도시를 찾지 못했어요. 영어 도시명으로도 검색해 보세요.");
+    const p=gd.results[0];
+    const wr=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.latitude}&longitude=${p.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1`);
+    if(!wr.ok) throw new Error("날씨 데이터를 불러오지 못했습니다.");
+    const w=await wr.json(), c=w.current, d=w.daily;
+    $("weather-result").innerHTML=`<div class="weather-top"><div><b>${safe(p.name)}${p.country?`, ${safe(p.country)}`:""}</b><div class="weather-desc">${safe(weatherCodes[c.weather_code]||"날씨 정보")} · 현지 시간 ${safe(c.time.replace("T"," "))}</div></div><div style="font-size:32px">${c.weather_code===0?"☀️":c.weather_code>=61?"🌧️":c.weather_code>=71?"❄️":"🌤️"}</div></div><div class="weather-temp">${Math.round(c.temperature_2m)}°C</div><div class="weather-desc">체감 ${Math.round(c.apparent_temperature)}°C · 최고 ${Math.round(d.temperature_2m_max[0])}° / 최저 ${Math.round(d.temperature_2m_min[0])}°</div><div class="weather-meta"><div><small>습도</small><b>${c.relative_humidity_2m}%</b></div><div><small>강수확률</small><b>${d.precipitation_probability_max[0]??"—"}%</b></div><div><small>풍속</small><b>${fmt(c.wind_speed_10m,0)} km/h</b></div></div>`;
+    $("weather-result").style.display="block"; $("weather-status").textContent="출처: Open-Meteo · 실시간 관측이 아닌 최신 모델/현재값일 수 있습니다.";
+    return {place:p.name,country:p.country,temp:Math.round(c.temperature_2m),desc:weatherCodes[c.weather_code]||"날씨 정보",high:Math.round(d.temperature_2m_max[0]),low:Math.round(d.temperature_2m_min[0]),rain:d.precipitation_probability_max[0]};
+  }catch(e){$("weather-status").innerHTML=`<span class="error">${safe(e.message||"날씨 조회 오류")}</span>`;return null;}
+}
+$("weather-form").addEventListener("submit",async e=>{e.preventDefault();await getWeather($("city").value.trim());});
+function makeSearchLinks(origin,dest,depart,ret,type){
+  const q=encodeURIComponent(`${origin} to ${dest} ${depart||""} ${ret||""}`.trim());
+  const flight=`https://www.google.com/travel/flights?q=${q}`;
+  const skyscanner=`https://www.skyscanner.net/transport/flights/${encodeURIComponent(origin.toLowerCase())}/${encodeURIComponent(dest.toLowerCase())}/${(depart||"anytime").replaceAll("-","").slice(2)}/`;
+  const train=`https://www.rome2rio.com/map/${encodeURIComponent(origin)}/${encodeURIComponent(dest)}`;
+  const links=[];
+  if(type!=="train") links.push({icon:"✈️",name:"Google Flights",desc:"항공권 가격·날짜 비교",url:flight},{icon:"🌐",name:"Skyscanner",desc:"항공권 판매처 비교",url:"https://www.skyscanner.net/"});
+  if(type!=="flight") links.push({icon:"🚆",name:"Rome2Rio",desc:"기차 포함 이동 경로 비교",url:train},{icon:"🚄",name:"Trainline",desc:"유럽 기차표 검색",url:"https://www.thetrainline.com/"});
+  links.push({icon:"🛏️",name:"Booking.com",desc:"목적지 숙소 검색",url:"https://www.booking.com/searchresults.html?ss="+encodeURIComponent(dest)},{icon:"🍜",name:"Google Maps",desc:"현지 맛집·평점 찾기",url:"https://www.google.com/maps/search/restaurants+in+"+encodeURIComponent(dest)});
+  return links;
+}
+function updateTravelLinks(){
+  const o=$("origin").value.trim()||"Seoul", d=$("destination").value.trim()||"Tokyo", date=$("depart-date").value, type=$("travel-type").value;
+  const links=makeSearchLinks(o,d,date,$("return-date").value,type);
+  $("travel-links").innerHTML=links.map(x=>`<a class="link-card" href="${x.url}" target="_blank" rel="noopener"><div class="link-icon">${x.icon}</div><b>${x.name}</b><small>${x.desc}</small></a>`).join("");
+}
+$("search-travel").addEventListener("click",()=>{
+  const o=$("origin").value.trim()||"Seoul", d=$("destination").value.trim()||"Tokyo", date=$("depart-date").value||"날짜 미정";
+  updateTravelLinks();
+  const type=$("travel-type").value;
+  const links=makeSearchLinks(o,d,date,$("return-date").value,type);
+  addMessage(`${o} → ${d} 여행 검색 조건을 준비했어요.\n출발일: ${date}\n인원: ${$("travelers").value}명\n\n아래 카드에서 항공·기차·숙소·맛집 검색을 열어 실제 최신 가격을 비교해 주세요. 최저가를 확정하려면 날짜와 조건을 각 판매처에서 확인해야 합니다.`,"bot");
+  const first=links[0]; if(first) window.open(first.url,"_blank","noopener");
+});
+function answerFor(text){
+ const t=text.toLowerCase();
+ const originMatch=text.match(/(.+?)(?:에서| 출발| 출발해서| 출발하여)/);
+ const destMatch=text.match(/(?:에서|가는|도착지|목적지)\s*([가-힣A-Za-z\s-]{2,30}?)(?:까지|로|에| 항공| 기차| 숙소| 맛집| 날씨| 최저가|$)/);
+ let destination=destMatch?destMatch[1].trim():"";
+ const known=["도쿄","tokyo","서울","seoul","파리","paris","런던","london","방콕","bangkok","타이베이","taipei","뉴욕","new york","로마","rome","부산","busan","싱가포르","singapore","오사카","osaka","바르셀로나","barcelona","시드니","sydney","하노이","hanoi","다낭","da nang"];
+ if(!destination){destination=known.find(x=>t.includes(x))||"";}
+ const isWeather=/날씨|기온|비 와|비올|weather/.test(t);
+ const isFx=/환율|환전|달러|엔화|유로|원화|환산/.test(t);
+ const isFlight=/항공|비행기|비행|항공권|flight/.test(t);
+ const isTrain=/기차|열차|철도|train|rail/.test(t);
+ const isHotel=/숙소|호텔|호텔|숙박|hotel|stay/.test(t);
+ const isFood=/맛집|음식|식당|먹거리|restaurant|food/.test(t);
+ const dest=destination||$("destination").value||"Tokyo";
+ let out=[];
+ if(isWeather){
+   $("city").value=dest; getWeather(dest);
+   out.push(`🌦️ ${dest} 날씨를 조회하고 있어요. 오른쪽 ‘목적지 날씨’ 카드에서 기온, 체감온도, 습도, 강수확률을 확인할 수 있어요.`);
+ }
+ if(isFx){
+   out.push(`💱 환율은 최신 공개 기준 환율로 환산할 수 있어요. 오른쪽 환율 계산기에서 통화와 금액을 선택해 주세요. ${fxDate?`현재 표시된 데이터 기준일은 ${fxDate}입니다.`:"환율 데이터 로딩 중입니다."} 실제 카드사/은행 환율과 수수료는 다를 수 있어요.`);
+ }
+ if(isFlight||isTrain||isHotel||isFood||(!isWeather&&!isFx)){
+   if(originMatch){$("origin").value=originMatch[1].trim();}
+   $("destination").value=dest;
+   if(isFlight||isTrain){
+     $("travel-type").value=isFlight&&isTrain?"all":isTrain?"train":"flight";
+     updateTravelLinks();
+     out.push(`🔎 ${$("origin").value} → ${dest} ${isFlight&&isTrain?"항공·기차":isTrain?"기차":"항공권"} 가격을 비교할 수 있도록 검색 링크를 준비했어요. 날짜별 최저가는 실제 판매처에서 확인해 주세요.`);
+   }
+   if(isHotel||isFood){
+     updateTravelLinks();
+     if(isHotel) out.push(`🛏️ ${dest} 숙소는 Booking.com 검색에서 위치·날짜·인원·취소 조건을 맞춰 비교해 보세요.`);
+     if(isFood) out.push(`🍜 ${dest} 맛집은 Google Maps에서 평점, 최근 리뷰, 영업시간을 함께 확인하는 것을 추천해요.`);
+   }
+   if(!isFlight&&!isTrain&&!isHotel&&!isFood){
+     updateTravelLinks();
+     out.push(`🌍 ${dest} 여행 준비를 도와드릴게요. 항공권·기차·숙소·맛집은 오른쪽 검색 카드를 이용하고, 날씨는 도시명을 입력해 조회할 수 있어요.`);
+   }
+ }
+ out.push("참고: 항공·기차·숙소의 실시간 가격과 예약 가능 여부를 직접 보장하는 예약 API는 연결되어 있지 않아요. 정확하지 않은 최저가를 만들어 보여주지 않고, 공식 검색 서비스로 연결합니다.");
+ return out.join("\n\n");
+}
+$("chat-form").addEventListener("submit",e=>{e.preventDefault();const input=$("chat-input");const text=input.value.trim();if(!text)return;addMessage(text,"user");input.value="";setTimeout(()=>addMessage(answerFor(text)),120);});
+document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>{$("chat-input").value=b.dataset.prompt;$("chat-form").requestSubmit();}));
+$("destination").addEventListener("change",updateTravelLinks);
+$("origin").addEventListener("change",updateTravelLinks);
+$("travel-type").addEventListener("change",updateTravelLinks);
+$("depart-date").addEventListener("change",updateTravelLinks);
+const today=new Date(); $("depart-date").value=new Date(today.getTime()+7*86400000).toISOString().slice(0,10);
+$("return-date").value=new Date(today.getTime()+14*86400000).toISOString().slice(0,10);
+loadRates(); getWeather("Tokyo"); updateTravelLinks();
+</script>
+</body>
+</html>
